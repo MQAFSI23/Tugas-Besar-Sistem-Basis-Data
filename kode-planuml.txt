@@ -1,0 +1,109 @@
+@startuml
+!theme vibrant
+' Entities
+
+entity Nasabah {
+    +nasabah_id <PK>: number
+    --
+    +pegawai_id <FK>: number
+    --
+    nama: text
+    alamat: text
+    telepon: text
+}
+
+entity Rekening {
+    +rekening_id <PK>: number
+    --
+    +nasabah_id <FK>: number
+    --
+    saldo: number
+}
+
+entity Rekening_Giro {
+    +rekening_id <PK>: number
+    --
+    batas_penarikan: number
+}
+
+entity Rekening_Tabungan {
+    +rekening_id <PK>: number
+    --
+    bunga: number
+}
+
+entity Transaksi {
+    +transaksi_id <PK>: number
+    --
+    jumlah: number
+    tipe_transaksi: text
+}
+
+entity Pinjaman {
+    +pinjaman_id <PK>: number
+    --
+    +nasabah_id <FK>: number
+    --
+    jumlah: number
+}
+
+entity Pegawai {
+    +pegawai_id <PK>: number
+    --
+    +manajer_id <FK>: number
+    --
+    nama: text
+    posisi: text
+}
+
+entity Melakukan {
+    +nasabah_id <FK>: number
+    +rekening_id <FK>: number
+    +transaksi_id <FK>: number
+    --
+    banyak_transaksi: number
+}
+
+' Relationships
+
+Nasabah ||--o{ Rekening
+note on link
+memiliki
+end note
+
+' 1-to-1
+Nasabah ||--o| Pinjaman
+note on link
+mengambil
+end note
+
+' 1-to-N
+Pegawai ||--o{ Nasabah
+note on link
+bertanggung jawab
+end note
+
+' Unary Relationship
+Pegawai ||--|{ Pegawai
+note on link
+mengelola
+end note
+
+' Sub-entity
+Rekening ||--o| Rekening_Giro
+note on link
+ISA
+end note
+
+Rekening ||--o| Rekening_Tabungan
+note on link
+ISA
+end note
+
+' Multi Entity Relationship
+Nasabah }o-- Melakukan
+
+Transaksi }|-- Melakukan
+
+Rekening }|-- Melakukan
+@enduml
